@@ -4,14 +4,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+/**
+ * ChuwuEvents implements the EventListener to listen for player-sent chat messages,
+ * intercept them (so the original ones will never appear in chat),
+ * then replace the characters to uwu-ify it and
+ * replace the original message, making the modified on appear in chat.
+ */
 public class ChuwuEvents implements Listener {
+    // Event listener to intercept player-sent chat messages
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        // Copy the message to a String
         String message = event.getMessage();
+        // Perform the neccessary replace actions on the message String
         message = message.replace("R", "W");
         message = message.replace("L", "W");
         message = message.replace("r", "w");
         message = message.replace("l", "w");
+        // Copy the modified String back into chat, this replaces the old message
         event.setMessage(message);
     }
 }

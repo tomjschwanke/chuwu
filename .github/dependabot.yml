@@ -1,13 +1,14 @@
 version: 2
 updates:
+
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
     labels:
-      - "dependencies"
-      
-- package-ecosystem: "github-actions"
+        - "dependencies"
+
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"

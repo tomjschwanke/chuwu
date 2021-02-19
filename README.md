@@ -1,4 +1,4 @@
-# chuwu
+# chuwu (CHat UWU)
 Minecraft Plugin to transform chat to UwU language
 
 Listens to all chat messages via an EventListener and replaces all 'R', 'r', 'L', 'l' with 'W' or 'w' respectively.

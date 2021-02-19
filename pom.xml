@@ -6,7 +6,7 @@
 
     <groupId>de.tomjschwanke.mc</groupId>
     <artifactId>chuwu</artifactId>
-    <version>1.0-R</version>
+    <version>1.1-R</version>
     <packaging>jar</packaging>
 
     <name>chuwu</name>

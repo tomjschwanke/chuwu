@@ -63,6 +63,21 @@ public class ChuwuPlayerData {
         }
     }
 
+    void resetPlayerState(String uuid) {
+        String deleteQuery = "DELETE * FROM `playerstates` WHERE `uuid` LIKE ?";
+        try(Connection connection = getDatabaseConnection()) {
+            connection.setAutoCommit(false);
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+            deleteStatement.setString(1, uuid);
+            deleteStatement.executeUpdate();
+            deleteStatement.close();
+            connection.commit();
+        }catch (SQLException exception) {
+            Chuwu.instance().getLogger().log(Level.SEVERE, "DB delete failed");
+            Chuwu.instance().getLogger().log(Level.SEVERE, exception.getMessage());
+        }
+    }
+
     boolean getPlayerState(String uuid) {
         // Set state to playerdefault as fallback if player is not in DB
         boolean state = chuwuConfig.getPlayerDefault();

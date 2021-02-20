@@ -14,14 +14,6 @@ public class ChuwuEvents implements Listener {
     // Event listener to intercept player-sent chat messages
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        // Copy the message to a String
-        String message = event.getMessage();
-        // Perform the neccessary replace actions on the message String
-        message = message.replace("R", "W");
-        message = message.replace("L", "W");
-        message = message.replace("r", "w");
-        message = message.replace("l", "w");
-        // Copy the modified String back into chat, this replaces the old message
-        event.setMessage(message);
+        event.setMessage(event.getMessage().replace("R", "W").replace("L", "W").replace("r", "w").replace("l", "w"));
     }
 }

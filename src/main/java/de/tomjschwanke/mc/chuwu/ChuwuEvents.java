@@ -11,11 +11,12 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  * replace the original message, making the modified on appear in chat.
  */
 public class ChuwuEvents implements Listener {
-    ChuwuPlayerData playerData = new ChuwuPlayerData();
+    ChuwuConfig chuwuConfig     = new ChuwuConfig();
+    ChuwuPlayerData playerData  = new ChuwuPlayerData();
     // Event listener to intercept player-sent chat messages
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if(Chuwu.instance().getConfig().getBoolean("globalstate") && playerData.getPlayerState(event.getPlayer().getUniqueId().toString())) {
+        if(chuwuConfig.getGlobalState() && playerData.getPlayerState(event.getPlayer().getUniqueId().toString())) {
             event.setMessage(event.getMessage().replace("R", "W").replace("L", "W").replace("r", "w").replace("l", "w"));
         }
     }

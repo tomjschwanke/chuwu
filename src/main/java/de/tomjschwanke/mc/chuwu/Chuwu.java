@@ -19,6 +19,10 @@ public final class Chuwu extends JavaPlugin {
         ChuwuConfig config = new ChuwuConfig();
         config.initConfig();
 
+        // Init database
+        ChuwuPlayerData playerData = new ChuwuPlayerData();
+        playerData.initDatabase();
+
         // Register chat event
         getServer().getPluginManager().registerEvents(new ChuwuEvents(), this);
     }

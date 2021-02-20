@@ -28,7 +28,7 @@ public final class Chuwu extends JavaPlugin {
         instance = null;
     }
 
-    public static Chuwu inst() {
+    public static Chuwu instance() {
         return instance;
     }
 }

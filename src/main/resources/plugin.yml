@@ -2,6 +2,6 @@ name: Chuwu
 version: ${project.version}
 main: de.tomjschwanke.mc.chuwu.Chuwu
 api-version: 1.15
-prefix: [ chuwu ]
+prefix: chuwu
 authors: [ tomjschwanke ]
 description: Replaces 'r' and 'l' with '2' in chat

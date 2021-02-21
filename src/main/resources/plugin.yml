@@ -5,3 +5,27 @@ api-version: 1.15
 prefix: chuwu
 authors: [ tomjschwanke ]
 description: Replaces 'r' and 'l' with 'w' in chat
+commands:
+  chuwu:
+    description: Manage Chuwu status
+    permission: chuwu.toggle
+    usage: /<command> [toggle/on/off]
+permissions:
+  chuwu.*:
+    description: All Chuwu permissions
+    children:
+      chuwu.toggle: true
+      chuwu.toggle.global: true
+      chuwu.toggle.others: true
+  chuwu.toggle:
+    description: Toggle Chuwu for yourself
+    default: true
+    children:
+      chuwu.toggle.global: true
+      chuwu.toggle.others: true
+  chuwu.toggle.global:
+    description: Toggle Chuwu for the entire server
+    default: op
+  chuwu.toggle.others:
+    description: Toggle Chuwu for others
+    default: false

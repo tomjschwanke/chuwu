@@ -14,4 +14,4 @@ To opt out, edit the `/plugins/bstats/config.yml` in your server folder.
 
 ## To-Do
 - [x] Initial release
-- [ ] Toggleable per player
+- [x] Toggleable per player

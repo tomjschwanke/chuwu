@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChuwuCommands implements CommandExecutor, TabCompleter {
     ChuwuConfig chuwuConfig = new ChuwuConfig();
@@ -52,35 +53,46 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        // TODO: implement tab completion
-        // TODO: filter list by already entered stuff
         ArrayList<String> list = new ArrayList<>();
         if(sender instanceof Player) {
             Player player = (Player) sender;
             if(command.getName().equals("chuwu")) {
-                if(player.hasPermission("chuwu.toggle") && !args[0].matches("on|off|toggle") && args[1].isEmpty()) {
-                    list.add("toggle");
-                    list.add("on");
-                    list.add("off");
+                if(player.hasPermission("chuwu.toggle")) {
+                    if(args.length == 1) {
+                        list.add("toggle");
+                        list.add("on");
+                        list.add("off");
+                        list.add("reset");
+                    }
                 }
                 if(player.hasPermission("chuwu.toggle.global")) {
-                    if(!args[0].equals("global") && args[1].isEmpty()) {
+                    if(args.length == 1) {
                         list.add("global");
-                    }else if(args[0].equals("global") && !args[1].matches("on|off|toggle") && args[2].isEmpty()) {
+                    }else if(args.length == 2 && args[0].equals("global")) {
                         list.add("toggle");
                         list.add("on");
                         list.add("off");
                     }
                 }
                 if(player.hasPermission("chuwu.toggle.others")) {
-                    if(!args[0].equals("player") && args[1].isEmpty()) {
+                    if(args.length == 1) {
                         list.add(("player"));
-                    }else if(args[0].equals("player") && !Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1])) && args[2].isEmpty()) {
-                        // TODO: filter online players by already entered stuff
+                    }else if(args.length == 2 && args[0].equals("player")) {
                         for(Player addPlayer : Bukkit.getOnlinePlayers()) {
                             list.add(addPlayer.getName());
                         }
-                    }else if(args[0].equals("player") && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1])) && !args[2].matches("on|off|toggle") && args[3].isEmpty()) {
+                    }else if(args.length == 3 && args[0].equals("player") && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) {
+                        list.add("toggle");
+                        list.add("on");
+                        list.add("off");
+                        list.add("reset");
+                    }
+                }
+                if(player.hasPermission("chuwu.config")) {
+                    if(args.length == 1) {
+                        list.add("reload");
+                        list.add("setplayerdefault");
+                    }else if(args.length == 2 && args[0].equals("setplayerdefault")) {
                         list.add("toggle");
                         list.add("on");
                         list.add("off");
@@ -88,6 +100,6 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
                 }
             }
         }
-        return list;
+        return list.stream().filter(string -> string.startsWith(args[args.length - 1])).collect(Collectors.toList());
     }
 }

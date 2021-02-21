@@ -31,7 +31,7 @@ public class ChuwuPlayerData {
     }
 
     void initDatabase() {
-        String createTableQuery = "CREATE TABLE IF NOT EXISTS `playerstates` ( `uuid` VARCHAR(36) NOT NULL , `state` BOOLEAN NOT NULL)";
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS `playerstates` ( `uuid` VARCHAR(36) NOT NULL , `state` BOOLEAN NOT NULL , PRIMARY KEY (`uuid`))";
         try (Connection connection = getDatabaseConnection()) {
             Statement createTableStatement;
             createTableStatement = connection.createStatement();
@@ -47,16 +47,12 @@ public class ChuwuPlayerData {
     }
 
     void savePlayerState(String uuid, boolean state) {
-        String insertQuery = "MERGE INTO `playerstates`(`uuid`, `state`) VALUES(?,?)";
+        String insertQuery = "MERGE INTO `playerstates` (`uuid`, `state`) VALUES (?,?)";
         try (Connection connection = getDatabaseConnection()) {
-            connection.setAutoCommit(false);
-            PreparedStatement insertStatement;
-            insertStatement = connection.prepareStatement(insertQuery);
+            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setString(1, uuid);
             insertStatement.setBoolean(2, state);
             insertStatement.executeUpdate();
-            insertStatement.close();
-            connection.commit();
         } catch (SQLException exception) {
             Chuwu.instance().getLogger().log(Level.SEVERE, "DB insert/update failed");
             Chuwu.instance().getLogger().log(Level.SEVERE, exception.getMessage());
@@ -66,12 +62,9 @@ public class ChuwuPlayerData {
     void resetPlayerState(String uuid) {
         String deleteQuery = "DELETE * FROM `playerstates` WHERE `uuid` LIKE ?";
         try(Connection connection = getDatabaseConnection()) {
-            connection.setAutoCommit(false);
             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
             deleteStatement.setString(1, uuid);
             deleteStatement.executeUpdate();
-            deleteStatement.close();
-            connection.commit();
         }catch (SQLException exception) {
             Chuwu.instance().getLogger().log(Level.SEVERE, "DB delete failed");
             Chuwu.instance().getLogger().log(Level.SEVERE, exception.getMessage());
@@ -83,7 +76,6 @@ public class ChuwuPlayerData {
         boolean state = chuwuConfig.getPlayerDefault();
         String selectQuery = "SELECT state FROM `playerstates` WHERE `uuid` LIKE ?";
         try (Connection connection = getDatabaseConnection()) {
-            connection.setAutoCommit(false);
             PreparedStatement selectStatement;
             selectStatement = connection.prepareStatement(selectQuery);
             selectStatement.setString(1, uuid);
@@ -91,8 +83,6 @@ public class ChuwuPlayerData {
             if (resultSet.next()) {
                 state = resultSet.getBoolean("state");
             }
-            selectStatement.close();
-            connection.commit();
         } catch (SQLException exception) {
             Chuwu.instance().getLogger().log(Level.SEVERE, "DB query failed");
             Chuwu.instance().getLogger().log(Level.SEVERE, exception.getMessage());

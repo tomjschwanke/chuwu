@@ -8,6 +8,10 @@ public class ChuwuConfig {
         Chuwu.instance().saveDefaultConfig();
     }
 
+    void reloadConfig() {
+        Chuwu.instance().reloadConfig();
+    }
+
     void toggleGlobalState() {
         setGlobalState(!getGlobalState());
     }

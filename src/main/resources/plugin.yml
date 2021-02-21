@@ -17,6 +17,7 @@ permissions:
       chuwu.toggle: true
       chuwu.toggle.global: true
       chuwu.toggle.others: true
+      chuwu.config: true
   chuwu.toggle:
     description: Toggle Chuwu for yourself
     default: true
@@ -29,3 +30,6 @@ permissions:
   chuwu.toggle.others:
     description: Toggle Chuwu for others
     default: false
+  chuwu.config:
+    description: Configure Chuwu and reload config from disk
+    default: op

@@ -1,6 +1,5 @@
 package de.tomjschwanke.mc.chuwu;
 
-import org.bukkit.entity.Player;
 import org.h2.api.ErrorCode;
 
 import java.sql.*;
@@ -63,7 +62,7 @@ public class ChuwuPlayerData {
     }
 
     void resetPlayerState(String uuid) {
-        String deleteQuery = "DELETE * FROM `playerstates` WHERE `uuid` LIKE ?";
+        String deleteQuery = "DELETE FROM `playerstates` WHERE `uuid` LIKE ?";
         try(Connection connection = getDatabaseConnection()) {
             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
             deleteStatement.setString(1, uuid);

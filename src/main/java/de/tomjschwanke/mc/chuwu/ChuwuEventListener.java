@@ -10,7 +10,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  * then replace the characters to uwu-ify it and
  * replace the original message, making the modified on appear in chat.
  */
-public class ChuwuEvents implements Listener {
+public class ChuwuEventListener implements Listener {
     ChuwuConfig chuwuConfig     = new ChuwuConfig();
     ChuwuPlayerData playerData  = new ChuwuPlayerData();
     // Event listener to intercept player-sent chat messages

@@ -24,7 +24,7 @@ public final class Chuwu extends JavaPlugin {
         playerData.initDatabase();
 
         // Register chat event
-        getServer().getPluginManager().registerEvents(new ChuwuEvents(), this);
+        getServer().getPluginManager().registerEvents(new ChuwuEventListener(), this);
     }
 
     @Override

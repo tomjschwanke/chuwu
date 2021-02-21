@@ -27,10 +27,10 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
                 if(player.hasPermission("chuwu.toggle")) {
                     if(args.length == 1) {
                         switch(args[0]) {
-                            case "toggle"   : playerData.savePlayerState(player, !playerData.getPlayerState(player)); return true;
-                            case "on"       : playerData.savePlayerState(player, true); return true;
-                            case "off"      : playerData.savePlayerState(player, false); return true;
-                            case "reset"    : playerData.resetPlayerState(player); return true;
+                            case "toggle"   : playerData.savePlayerState(player.getUniqueId().toString(), !playerData.getPlayerState(player.getUniqueId().toString())); return true;
+                            case "on"       : playerData.savePlayerState(player.getUniqueId().toString(), true); return true;
+                            case "off"      : playerData.savePlayerState(player.getUniqueId().toString(), false); return true;
+                            case "reset"    : playerData.resetPlayerState(player.getUniqueId().toString()); return true;
                             default         : return false;
                         }
                     }
@@ -54,10 +54,10 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
                         // TODO: possible race condition where player loggs off right after check
                         if(otherPlayer != null) {
                             switch(args[2]) {
-                                case "toggle"   : playerData.savePlayerState(otherPlayer, !playerData.getPlayerState(otherPlayer)); return true;
-                                case "on"       : playerData.savePlayerState(otherPlayer, true); return true;
-                                case "off"      : playerData.savePlayerState(otherPlayer, false); return true;
-                                case "reset"    : playerData.resetPlayerState(otherPlayer); return true;
+                                case "toggle"   : playerData.savePlayerState(otherPlayer.getUniqueId().toString(), !playerData.getPlayerState(otherPlayer.getUniqueId().toString())); return true;
+                                case "on"       : playerData.savePlayerState(otherPlayer.getUniqueId().toString(), true); return true;
+                                case "off"      : playerData.savePlayerState(otherPlayer.getUniqueId().toString(), false); return true;
+                                case "reset"    : playerData.resetPlayerState(otherPlayer.getUniqueId().toString()); return true;
                                 default         : return false;
                             }
                         }

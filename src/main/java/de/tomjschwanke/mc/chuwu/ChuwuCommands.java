@@ -23,31 +23,65 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
 
             if(command.getName().equals("chuwu")) {
                 // Correct prefix
-                // TODO: switch?
-                if(args[0].equals("global")) {
-                    // TODO: lock behind permission
-                    if(args[1].equals("toggle")) {
-                        // Global toggle
-                        chuwuConfig.toggleGlobalState();
-                    }else if(args[1].equals("on")) {
-                        chuwuConfig.setGlobalState(true);
-                    }else if(args[1].equals("off")) {
-                        chuwuConfig.setGlobalState(false);
+                // TODO: command feedback
+                if(player.hasPermission("chuwu.toggle")) {
+                    if(args.length == 1) {
+                        switch(args[0]) {
+                            case "toggle"   : playerData.savePlayerState(player, !playerData.getPlayerState(player)); return true;
+                            case "on"       : playerData.savePlayerState(player, true); return true;
+                            case "off"      : playerData.savePlayerState(player, false); return true;
+                            case "reset"    : playerData.resetPlayerState(player); return true;
+                            default         : return false;
+                        }
                     }
-                }else if(args[0].equals("toggle")) {
-                    // Toggle player state
-                    playerData.savePlayerState(player.getUniqueId().toString(), !playerData.getPlayerState(player.getUniqueId().toString()));
-                }else if(args[0].equals("on")) {
-                    // Player-specific on
-                    playerData.savePlayerState(player.getUniqueId().toString(), true);
-                }else if(args[0].equals("off")) {
-                    // Player-specific off
-                    playerData.savePlayerState(player.getUniqueId().toString(), false);
+                }
+                if(player.hasPermission("chuwu.toggle.global")) {
+                    if(args.length == 2 && args[0].equals("global")) {
+                        switch(args[1]) {
+                            case "toggle"   : chuwuConfig.setGlobalState(!chuwuConfig.getGlobalState()); return true;
+                            case "on"       : chuwuConfig.setGlobalState(true); return true;
+                            case "off"      : chuwuConfig.setGlobalState(false); return true;
+                            default         : return false;
+                        }
+                    }
+                }
+                if(player.hasPermission("chuwu.toggle.others")) {
+                    if(args.length == 2 && args[0].equals("player")) {
+                        // TODO feedback
+                        return false;
+                    }else if(args.length == 3 && args[0].equals("player") && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) {
+                        Player otherPlayer = Bukkit.getPlayer(args[1]);
+                        // TODO: possible race condition where player loggs off right after check
+                        if(otherPlayer != null) {
+                            switch(args[2]) {
+                                case "toggle"   : playerData.savePlayerState(otherPlayer, !playerData.getPlayerState(otherPlayer)); return true;
+                                case "on"       : playerData.savePlayerState(otherPlayer, true); return true;
+                                case "off"      : playerData.savePlayerState(otherPlayer, false); return true;
+                                case "reset"    : playerData.resetPlayerState(otherPlayer); return true;
+                                default         : return false;
+                            }
+                        }
+                    }
+                }
+                if(player.hasPermission("chuwu.config")) {
+                    if(args.length == 1) {
+                        if ("reload".equals(args[0])) {
+                            chuwuConfig.reloadConfig();
+                        } else {
+                            // TODO: feedback
+                            return false;
+                        }
+                    }else if(args.length == 2 && args[0].equals("setplayerdefault")) {
+                        switch(args[1]) {
+                            case "toggle"   : chuwuConfig.setPlayerDefault(!chuwuConfig.getPlayerDefault()); return true;
+                            case "on"       : chuwuConfig.setPlayerDefault(true); return true;
+                            case "off"      : chuwuConfig.setPlayerDefault(false); return true;
+                            default         : return false;
+                        }
+                    }
                 }
             }
         }
-
-        // TODO: return true when command was valid
         return false;
     }
 

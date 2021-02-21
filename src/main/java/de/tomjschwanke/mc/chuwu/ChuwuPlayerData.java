@@ -1,8 +1,11 @@
 package de.tomjschwanke.mc.chuwu;
 
+import org.bukkit.entity.Player;
+import org.h2.api.ErrorCode;
+
 import java.sql.*;
 import java.util.logging.Level;
-import org.h2.api.ErrorCode;
+
 
 public class ChuwuPlayerData {
 
@@ -46,11 +49,11 @@ public class ChuwuPlayerData {
         }
     }
 
-    void savePlayerState(String uuid, boolean state) {
+    void savePlayerState(Player player, boolean state) {
         String insertQuery = "MERGE INTO `playerstates` (`uuid`, `state`) VALUES (?,?)";
         try (Connection connection = getDatabaseConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-            insertStatement.setString(1, uuid);
+            insertStatement.setString(1, player.getUniqueId().toString());
             insertStatement.setBoolean(2, state);
             insertStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -59,11 +62,11 @@ public class ChuwuPlayerData {
         }
     }
 
-    void resetPlayerState(String uuid) {
+    void resetPlayerState(Player player) {
         String deleteQuery = "DELETE * FROM `playerstates` WHERE `uuid` LIKE ?";
         try(Connection connection = getDatabaseConnection()) {
             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
-            deleteStatement.setString(1, uuid);
+            deleteStatement.setString(1, player.getUniqueId().toString());
             deleteStatement.executeUpdate();
         }catch (SQLException exception) {
             Chuwu.instance().getLogger().log(Level.SEVERE, "DB delete failed");
@@ -71,14 +74,14 @@ public class ChuwuPlayerData {
         }
     }
 
-    boolean getPlayerState(String uuid) {
+    boolean getPlayerState(Player player) {
         // Set state to playerdefault as fallback if player is not in DB
         boolean state = chuwuConfig.getPlayerDefault();
         String selectQuery = "SELECT state FROM `playerstates` WHERE `uuid` LIKE ?";
         try (Connection connection = getDatabaseConnection()) {
             PreparedStatement selectStatement;
             selectStatement = connection.prepareStatement(selectQuery);
-            selectStatement.setString(1, uuid);
+            selectStatement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = selectStatement.executeQuery();
             if (resultSet.next()) {
                 state = resultSet.getBoolean("state");

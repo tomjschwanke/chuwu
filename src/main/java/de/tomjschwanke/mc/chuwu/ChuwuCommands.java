@@ -51,7 +51,7 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
                     if(args.length == 2 && args[0].equals("global")) {
                         switch(args[1]) {
                             case "toggle":
-                                chuwuConfig.setGlobalState(!chuwuConfig.getGlobalState());
+                                chuwuConfig.toggleGlobalState();
                                 player.sendMessage("Chuwu globally toggled to " + (chuwuConfig.getGlobalState()? "on" : "off"));
                                 return true;
                             case "on":
@@ -114,7 +114,7 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
                     }else if(args.length == 2 && args[0].equals("setplayerdefault")) {
                         switch(args[1]) {
                             case "toggle":
-                                chuwuConfig.setPlayerDefault(!chuwuConfig.getPlayerDefault());
+                                chuwuConfig.togglePlayerDefault();
                                 player.sendMessage("Chuwu playerdefault toggled to " + (chuwuConfig.getPlayerDefault()? "on" : "off"));
                                 return true;
                             case "on":

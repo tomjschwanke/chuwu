@@ -9,7 +9,6 @@ commands:
   chuwu:
     description: Manage Chuwu status
     permission: chuwu.toggle
-    usage: /<command> [toggle/on/off/reset]
 permissions:
   chuwu.*:
     description: All Chuwu permissions

@@ -15,122 +15,226 @@ public class ChuwuCommands implements CommandExecutor, TabCompleter {
     ChuwuConfig chuwuConfig = new ChuwuConfig();
     ChuwuPlayerData playerData = new ChuwuPlayerData();
 
-    // TODO: rethink feedback structure, check permissions later to give more meaningful feedback?
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
 
             if(command.getName().equals("chuwu")) {
-                if(player.hasPermission("chuwu.toggle")) {
-                    if(args.length == 1) {
+                switch(args.length) {
+                    case 1:
                         switch(args[0]) {
                             case "toggle":
-                                playerData.savePlayerState(player.getUniqueId().toString(), !playerData.getPlayerState(player.getUniqueId().toString()));
-                                player.sendMessage("Chuwu toggled to " + (playerData.getPlayerState(player.getUniqueId().toString()) ? "on" : "off"));
-                                return true;
-                            case "on":
-                                playerData.savePlayerState(player.getUniqueId().toString(), true);
-                                player.sendMessage("Chuwu set to on");
-                                return true;
-                            case "off":
-                                playerData.savePlayerState(player.getUniqueId().toString(), false);
-                                player.sendMessage("Chuwu set to off");
-                                return true;
-                            case "reset"    :
-                                playerData.resetPlayerState(player.getUniqueId().toString());
-                                player.sendMessage("Chuwu reset to default for you");
-                                return true;
-                            default:
-                                player.sendMessage("Usage: /chuwu [toggle|on|off|reset]");
-                                return false;
-                        }
-                    }
-                }
-                if(player.hasPermission("chuwu.toggle.global")) {
-                    if(args.length == 2 && args[0].equals("global")) {
-                        switch(args[1]) {
-                            case "toggle":
-                                chuwuConfig.toggleGlobalState();
-                                player.sendMessage("Chuwu globally toggled to " + (chuwuConfig.getGlobalState()? "on" : "off"));
-                                return true;
-                            case "on":
-                                chuwuConfig.setGlobalState(true);
-                                player.sendMessage("Chuwu globally set to on");
-                                return true;
-                            case "off":
-                                chuwuConfig.setGlobalState(false);
-                                player.sendMessage("Chuwu globally set to off");
-                                return true;
-                            default:
-                                player.sendMessage("Usage: /chuwu global [toggle|on|off]");
-                                return false;
-                        }
-                    }
-                }
-                if(player.hasPermission("chuwu.toggle.others")) {
-                    if(args.length == 2 && args[0].equals("player")) {
-                        // TODO feedback
-                        return false;
-                    }else if(args.length == 3 && args[0].equals("player") && Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) {
-                        Player otherPlayer = Bukkit.getPlayer(args[1]);
-                        // TODO: possible race condition where player loggs off right after check
-                        if(otherPlayer != null) {
-                            switch(args[2]) {
-                                case "toggle":
-                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), !playerData.getPlayerState(otherPlayer.getUniqueId().toString()));
-                                    player.sendMessage("Chuwu toggled to " + (playerData.getPlayerState(otherPlayer.getUniqueId().toString())? "on" : "off") + " for " + otherPlayer.getName());
+                                if(player.hasPermission("chuwu.toggle")) {
+                                    playerData.savePlayerState(player.getUniqueId().toString(), !playerData.getPlayerState(player.getUniqueId().toString()));
+                                    player.sendMessage("Chuwu toggled to " + (playerData.getPlayerState(player.getUniqueId().toString()) ? "on" : "off" ));
                                     return true;
-                                case "on":
-                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), true);
-                                    player.sendMessage("Chuwu set to on for " + otherPlayer.getName());
-                                    return true;
-                                case "off":
-                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), false);
-                                    player.sendMessage("Chuwu set to off for " + otherPlayer.getName());
-                                    return true;
-                                case "reset":
-                                    playerData.resetPlayerState(otherPlayer.getUniqueId().toString());
-                                    player.sendMessage("Chuwu reset to default for " + otherPlayer.getName());
-                                    return true;
-                                default:
-                                    player.sendMessage("Usage: /chuwu player [toggle|on|off|reset]");
+                                }else {
+                                    player.sendMessage("You do not have permission to set chuwu for yourself");
                                     return false;
-                            }
-                        }
-                    }
-                }
-                if(player.hasPermission("chuwu.config")) {
-                    if(args.length == 1) {
-                        // TODO: fix
-                        if ("reload".equals(args[0])) {
-                            chuwuConfig.reloadConfig();
-                            player.sendMessage("Chuwu config reloaded");
-                            return true;
-                        } else {
-                            player.sendMessage("Usage: /chuwu reload");
-                            return false;
-                        }
-                    }else if(args.length == 2 && args[0].equals("setplayerdefault")) {
-                        switch(args[1]) {
-                            case "toggle":
-                                chuwuConfig.togglePlayerDefault();
-                                player.sendMessage("Chuwu playerdefault toggled to " + (chuwuConfig.getPlayerDefault()? "on" : "off"));
-                                return true;
+                                }
                             case "on":
-                                chuwuConfig.setPlayerDefault(true);
-                                player.sendMessage("Chuwu playerdefault set to on");
-                                return true;
+                                if(player.hasPermission("chuwu.toggle")) {
+                                    playerData.savePlayerState(player.getUniqueId().toString(), true);
+                                    player.sendMessage("Chuwu set to on");
+                                    return true;
+                                }else {
+                                    player.sendMessage("You do not have permission to set chuwu for yourself");
+                                    return false;
+                                }
                             case "off":
-                                chuwuConfig.setPlayerDefault(false);
-                                player.sendMessage("Chuwu playerdefault set to on");
-                                return true;
+                                if(player.hasPermission("chuwu.toggle")) {
+                                    playerData.savePlayerState(player.getUniqueId().toString(), false);
+                                    player.sendMessage("Chuwu set to off");
+                                    return true;
+                                }else {
+                                    player.sendMessage("You do not have permission to set chuwu for yourself");
+                                    return false;
+                                }
+                            case "reset":
+                                if(player.hasPermission("chuwu.toggle")) {
+                                    playerData.resetPlayerState(player.getUniqueId().toString());
+                                    player.sendMessage("Chuwu reset to playerdefault for you: " + (playerData.getPlayerState(player.getUniqueId().toString()) ? "on" : "off"));
+                                    return true;
+                                }else {
+                                    player.sendMessage("You do not have the permission to set chuwu for yourself");
+                                    return false;
+                                }
+                            case "reload":
+                                if(player.hasPermission("chuwu.config")) {
+                                    chuwuConfig.reloadConfig();
+                                    player.sendMessage("Chuwu config reloaded");
+                                    return true;
+                                }else {
+                                    player.sendMessage("You do not have permission to reload the chuwu config");
+                                    return false;
+                                }
                             default:
-                                player.sendMessage("Usage: /chuwu playerdefault [toggle|on|off]");
+                                player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
                                 return false;
                         }
-                    }
+                    case 2:
+                        switch(args[0]) {
+                            case "global":
+                                switch(args[1]) {
+                                    case "toggle":
+                                        if(player.hasPermission("chuwu.toggle.global")) {
+                                            chuwuConfig.toggleGlobalState();
+                                            player.sendMessage("Chuwu gloablly toggled to " + (chuwuConfig.getGlobalState() ? "on" : "off"));
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to set chuwu globally");
+                                            return false;
+                                        }
+                                    case "on":
+                                        if(player.hasPermission("chuwu.toggle.global")) {
+                                            chuwuConfig.setGlobalState(true);
+                                            player.sendMessage("Chuwu globally set to on");
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to set chuwu globally");
+                                            return false;
+                                        }
+                                    case "off":
+                                        if(player.hasPermission("chuwu.toggle.global")) {
+                                            chuwuConfig.setGlobalState(false);
+                                            player.sendMessage("Chuwu globally set to off");
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to set chuwu gloablly");
+                                            return false;
+                                        }
+                                    default:
+                                        if(player.hasPermission("chuwu.toggle.global")) {
+                                            player.sendMessage("Usage: /chuwu global [toggle | on | off]");
+                                        }else {
+                                            player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
+                                        }
+                                        return false;
+                                }
+                            case "player":
+                                if(player.hasPermission("chuwu.toggle.others")) {
+                                    player.sendMessage("Usage: /chuwu player {player} [toggle | on | off | reset]");
+                                }else {
+                                    player.sendMessage("You do not have permission to set chuwu for other players");
+                                }
+                                return false;
+                            case "setplayerdefault":
+                                switch(args[1]) {
+                                    case "toggle":
+                                        if(player.hasPermission("chuwu.config")) {
+                                            chuwuConfig.togglePlayerDefault();
+                                            player.sendMessage("Chuwu playerdefault set to " + (chuwuConfig.getPlayerDefault() ? "on" : "off"));
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to adjust the playerdefault");
+                                            return false;
+                                        }
+                                    case "on":
+                                        if(player.hasPermission("chuwu.config")) {
+                                            chuwuConfig.setPlayerDefault(true);
+                                            player.sendMessage("Chuwu playerdefault set to on");
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to adjust the playerdefault");
+                                            return false;
+                                        }
+                                    case "off":
+                                        if(player.hasPermission("chuwu.config")) {
+                                            chuwuConfig.setPlayerDefault(false);
+                                            player.sendMessage("Chuwu playerdefault set to off");
+                                            return true;
+                                        }else {
+                                            player.sendMessage("You do not have permission to adjust the playerdefault");
+                                            return false;
+                                        }
+                                    default:
+                                        if(player.hasPermission("chuwu.config")) {
+                                            player.sendMessage("Usage: /chuwu setplayerdefault [toggle | on | off]");
+                                        }else {
+                                            player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
+                                        }
+                                        return false;
+                                }
+                            default:
+                                if(player.hasPermission("chuwu.config")) {
+                                    player.sendMessage("Usage: /chuwu setplayerdefault [toggle | on | off]");
+                                }else {
+                                    player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
+                                }
+                                return false;
+                        }
+                    case 3:
+                        switch(args[0]) {
+                            case "player":
+                                if(Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) {
+                                    // player found
+                                    Player otherPlayer = Bukkit.getPlayer(args[1]);
+                                    if(otherPlayer != null) {
+                                        switch(args[2]) {
+                                            case "toggle":
+                                                if(player.hasPermission("chuwu.toggle.others")) {
+                                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), !playerData.getPlayerState(otherPlayer.getUniqueId().toString()));
+                                                    player.sendMessage("Chuwu set to " + (playerData.getPlayerState(otherPlayer.getUniqueId().toString())? "on" : "off") + " for " + otherPlayer.getDisplayName() + " (" + player.getName() + ")");
+                                                    return true;
+                                                }else {
+                                                    player.sendMessage("You do not have permission to set chuwu for other players");
+                                                    return false;
+                                                }
+                                            case "on":
+                                                if(player.hasPermission("chuwu.toggle.others")) {
+                                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), true);
+                                                    player.sendMessage("Chuwu set to on for " + otherPlayer.getDisplayName() + " (" + player.getName() + ")");
+                                                    return true;
+                                                }else {
+                                                    player.sendMessage("You do not have permission to set chuwu for other players");
+                                                    return false;
+                                                }
+                                            case "off":
+                                                if(player.hasPermission("chuwu.toggle.others")) {
+                                                    playerData.savePlayerState(otherPlayer.getUniqueId().toString(), false);
+                                                    player.sendMessage("Chuwu set to off for " + otherPlayer.getDisplayName() + " (" + player.getName() + ")");
+                                                    return true;
+                                                }else {
+                                                    player.sendMessage("You do not have permission to set chuwu for other players");
+                                                    return false;
+                                                }
+                                            case "reset":
+                                                if(player.hasPermission("chuwu.toggle.others")) {
+                                                    playerData.resetPlayerState(otherPlayer.getUniqueId().toString());
+                                                    player.sendMessage("Chuwu reset to playerdefault for " + player.getDisplayName() + " (" + player.getName() + ")");
+                                                    return true;
+                                                }else {
+                                                    player.sendMessage("You do not have permission to set chuwu for others");
+                                                    return false;
+                                                }
+                                            default:
+                                                if(player.hasPermission("chuwu.toggle.others")) {
+                                                    player.sendMessage("Usage: /chuwu player {player} [toggle | on | off | reset]");
+                                                }else {
+                                                    player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
+                                                }
+                                        }
+                                    }else {
+                                        player.sendMessage("The player could not be found. Is he online?");
+                                    }
+                                }else {
+                                    if(player.hasPermission("chuwu.toggle.others")) {
+                                        player.sendMessage("The player could not be found. Is he online?");
+                                    }else {
+                                        player.sendMessage("You do not have permission to set chuwu for other players");
+                                    }
+                                    return false;
+                                }
+                            default:
+                                if(player.hasPermission("chuwu.toggle.others")) {
+                                    player.sendMessage("Usage: /chuwu player {player} [toggle | on | off | reset]");
+                                }else {
+                                    player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
+                                }
+                        }
                 }
+                player.sendMessage("Usage: /chuwu [toggle | on | off | reset]");
             }
         }
         return false;

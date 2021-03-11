@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
- * ChuwuEvents implements the EventListener to listen for player-sent chat messages,
+ * ChuwuEventListener implements the EventListener to listen for player-sent chat messages,
  * intercept them (so the original ones will never appear in chat),
  * then replace the characters to uwu-ify it and
  * replace the original message, making the modified on appear in chat.

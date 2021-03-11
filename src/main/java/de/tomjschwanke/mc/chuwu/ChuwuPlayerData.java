@@ -1,7 +1,5 @@
 package de.tomjschwanke.mc.chuwu;
 
-import org.h2.api.ErrorCode;
-
 import java.sql.*;
 import java.util.logging.Level;
 

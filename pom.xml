@@ -6,7 +6,7 @@
 
     <groupId>de.tomjschwanke.mc</groupId>
     <artifactId>chuwu</artifactId>
-    <version>1.0-R</version>
+    <version>1.1-R</version>
     <packaging>jar</packaging>
 
     <name>chuwu</name>
@@ -82,6 +82,11 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>2.2.1</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
         </dependency>
     </dependencies>
 </project>
